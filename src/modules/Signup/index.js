@@ -7,6 +7,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import supabaseClient from '../../utils/supabaseClient';
 import { useGlobalContext } from '../../utils/context';
 import { userFun } from '../../utils/utilites';
+import useAnalyticsEventTracker from '../../useAnalyticsEventTracker';
 
 const SignupSchema = Yup.object().shape({
 	name: Yup.string().required('Name is required'),
@@ -20,6 +21,7 @@ const Signup = () => {
   const [btnLoading, setbtnLoading] = useState(false)
 
   const { user } = useGlobalContext();
+  const gaEventTracker = useAnalyticsEventTracker('Sign up');
 
   useEffect(() => { 
       if(user) {
@@ -65,7 +67,7 @@ const Signup = () => {
                         isClosable: true,
                     })
                     navigation('/login');
-    
+                    gaEventTracker('signed-up')
                 }else {
                     toast({
                         title: 'Error',

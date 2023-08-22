@@ -15,6 +15,10 @@ import Cart from './modules/Cart';
 import { MyGlobalContext } from './utils/context';
 import { getUser } from './utils/utilites';
 import supabaseClient from './utils/supabaseClient';
+import ReactGA from 'react-ga';
+
+const TRACKING_ID = "G-BRRM44PS00"; 
+ReactGA.initialize(TRACKING_ID);
 
 function App() {
   const [user, setUser] = useState(null);
@@ -27,6 +31,12 @@ function App() {
       setLoading(false)
     });
   }, [])
+  
+  useEffect(() => {
+    console.log(window.location.pathname + window.location.search)
+    ReactGA.pageview(window.location.pathname + window.location.search);
+
+  }, [window.location.search])
 
   if(loading === true) {
     return null;

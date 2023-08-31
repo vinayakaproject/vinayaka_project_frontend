@@ -35,6 +35,11 @@ const Home = () => {
     }
     fetchProduct()
   }, [])
+  
+  window.onbeforeunload = function () {
+    console.log("In onbeforeunload");
+    localStorage.removeItem('allProducts')
+  };
 
   return (
     <>

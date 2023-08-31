@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
+import { userFun } from '../../utils/utilites';
+import { useToast } from '@chakra-ui/react'
+
 
 const Product = () => {
   //const { id } = useParams();
   const { state } = useLocation();
   const navigate = useNavigate()
   const [product, setProduct] = useState({})
+
+  const toast = useToast()
 
   console.log(state)
 
@@ -14,27 +19,63 @@ const Product = () => {
     setProduct(state)
   }, [state])
 
-  const handleCart = (product, redirect) => {
+  const handleCart = async (product, redirect) => {
     console.log(product)
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const isProductExist = cart.find(item => item._id === product._id)
-    if(isProductExist) {
-      const updatedCart = cart.map(item => {
-        if(item._id === product._id) {
-          return {
-            ...item,
-            quantity: item.quantity + 1
-          }
+    const productsFetch = await userFun('getProduct', {
+      id: product._id
+    }, 'POST');
+    
+    if(productsFetch.status === 201) {
+      console.log(productsFetch);   
+      const fetchedProd = productsFetch.message[0];
+      if(!fetchedProd) {
+        toast({
+            title: 'Warning',
+            description: "This product seems to be deleted",
+            status: 'warning',
+            duration: 9000,
+            isClosable: true,
+        })
+      } else if(JSON.stringify(product) !== JSON.stringify(fetchedProd)) { 
+        toast({
+            title: 'Warning',
+            description: "This product seems to be updated. Make sure you review this product again before adding to cart",
+            status: 'warning',
+            duration: 9000,
+            isClosable: true,
+        })
+        setProduct(fetchedProd);
+      } else {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const isProductExist = cart.find(item => item._id === product._id)
+        if(isProductExist) {
+          const updatedCart = cart.map(item => {
+            if(item._id === product._id) {
+              return {
+                ...item,
+                quantity: item.quantity + 1
+              }
+            }
+            return item
+          })
+          localStorage.setItem('cart', JSON.stringify(updatedCart))
+        } else {
+          localStorage.setItem('cart', JSON.stringify([...cart, {...product, quantity: 1}]))
         }
-        return item
-      })
-      localStorage.setItem('cart', JSON.stringify(updatedCart))
-    } else {
-      localStorage.setItem('cart', JSON.stringify([...cart, {...product, quantity: 1}]))
-    }
-    alert('Product added to cart')
-    if(redirect) {
-      navigate('/cart')
+        alert('Product added to cart')
+        if(redirect) {
+          navigate('/cart')
+        }
+      }
+    }else {
+        console.log(productsFetch);
+        toast({
+            title: 'Error',
+            description: productsFetch.message,
+            status: 'error',
+            duration: 9000,
+            isClosable: true,
+        })
     }
   }
 
@@ -85,7 +126,7 @@ const Product = () => {
                   </a>
                 </span>
               </div>
-              <p className="leading-relaxed">This product is available for Case on Delivery as well as Online Payment</p>
+              <p className="leading-relaxed mb-5">{product?.description}</p>
               {/* <div className="flex mt-6 items-center pb-5 border-b-2 border-gray-100 mb-5">
                 <div className="flex">
                   <span className="mr-3">Color</span>

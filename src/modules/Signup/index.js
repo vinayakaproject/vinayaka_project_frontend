@@ -67,7 +67,7 @@ const Signup = () => {
                         isClosable: true,
                     })
                     navigation('/login');
-                    gaEventTracker('signed-up')
+                    gaEventTracker('signed-up');
                 }else {
                     toast({
                         title: 'Error',

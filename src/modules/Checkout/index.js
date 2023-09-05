@@ -8,6 +8,7 @@ import supabaseClient from '../../utils/supabaseClient';
 import states from '../../states';
 import { useGlobalContext } from '../../utils/context';
 import { userFun } from '../../utils/utilites';
+import useAnalyticsEventTracker from '../../useAnalyticsEventTracker';
 
 const SignupSchema = Yup.object().shape({
 	flat: Yup.string().required('Flat/House no is required'),
@@ -27,6 +28,7 @@ const Checkout = () => {
   const { user } = useGlobalContext();
 
   const carts = JSON.parse(localStorage.getItem('cart')) || []
+  const gaEventTracker = useAnalyticsEventTracker('Checkout');
 
   console.log(carts)
 
@@ -71,7 +73,8 @@ const Checkout = () => {
             status: 'success',
             duration: 9000,
             isClosable: true,
-        })
+        });
+        gaEventTracker('ordered');
         navigation('/orders');
         window.location.reload();
       }else {

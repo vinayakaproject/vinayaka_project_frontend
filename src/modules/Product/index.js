@@ -2,13 +2,15 @@ import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { userFun } from '../../utils/utilites';
 import { useToast } from '@chakra-ui/react'
-
+import useAnalyticsEventTracker from '../../useAnalyticsEventTracker';
 
 const Product = () => {
   //const { id } = useParams();
   const { state } = useLocation();
   const navigate = useNavigate()
   const [product, setProduct] = useState({})
+
+  const gaEventTracker = useAnalyticsEventTracker('Cart');
 
   const toast = useToast()
 
@@ -63,6 +65,7 @@ const Product = () => {
           localStorage.setItem('cart', JSON.stringify([...cart, {...product, quantity: 1}]))
         }
         alert('Product added to cart')
+        gaEventTracker("added-to-cart")
         if(redirect) {
           navigate('/cart')
         }

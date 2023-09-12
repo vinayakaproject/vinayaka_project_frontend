@@ -12,9 +12,10 @@ import Product from './modules/Product';
 import Products from './modules/Products';
 import CategoryProducts from './modules/CategoryProducts';
 import Cart from './modules/Cart';
+import Contact from './modules/Contact';
+import About from './modules/About'; 
 import { MyGlobalContext } from './utils/context';
 import { getUser } from './utils/utilites';
-import supabaseClient from './utils/supabaseClient';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -45,6 +46,8 @@ function App() {
           <Route path="/signup" element={<Signup/>} />
           <Route path="/checkout" element={<Checkout/>} />
           <Route path="/orders" element={<Orders/>} />
+          <Route path="/contact" element={<Contact/>} />
+          <Route path="/About" element={<About/>} />
           <Route path="*" element={<div>404</div>} />
         </Routes>
         <Footer/>

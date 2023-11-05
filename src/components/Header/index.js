@@ -17,6 +17,7 @@ import avatar from '../../avatar.jpg';
 import { useGlobalContext } from '../../utils/context';
 import logo from '../../assets/Logo.png'; // Import your logo image
 import audioFile from '../../assets/audios/bgmusic.mpeg';
+import { useFeatureFlagEnabled } from 'posthog-js/react';
 
 const navigations = [
   {
@@ -43,6 +44,8 @@ const Header = () => {
   const [loading, setLoading] = useState(true);
   const [musicPlaying, setMusicPlaying] = useState(true);
   const [musicMuted, setMusicMuted] = useState(false);
+
+  const flagEnabled = useFeatureFlagEnabled('auto-music');
 
   const signOut = async () => { 
     localStorage.removeItem('cart');
@@ -78,7 +81,7 @@ const Header = () => {
 
   useEffect(() => {
     // Start playing the audio automatically when the component mounts
-    setMusicPlaying(true);
+    flagEnabled && setMusicPlaying(true);
   }, []);
 
   return (
@@ -105,13 +108,16 @@ const Header = () => {
         </nav>
         <Flex direction={'row'} gap={4}>
           {/* Rest of the code... */}
-          <div
-            onClick={toggleMute}
-            className={`inline-flex items-center text-white border-0 py-2 px-4 focus:outline-none hover:bg-indigo-700 rounded text-base mt-4 md:mt-0 cursor-pointer ${musicMuted ? "bg-red-500 hover:bg-red-700" : "bg-blue-500 hover:bg-blue-700"}`}
-            size="md"
-          >
-            {musicMuted ? "Unmute Music" : "Mute Music"}
-          </div>
+          {
+            flagEnabled && 
+            <div
+              onClick={toggleMute}
+              className={`inline-flex items-center text-white border-0 py-2 px-4 focus:outline-none hover:bg-indigo-700 rounded text-base mt-4 md:mt-0 cursor-pointer ${musicMuted ? "bg-red-500 hover:bg-red-700" : "bg-blue-500 hover:bg-blue-700"}`}
+              size="md"
+            >
+              {musicMuted ? "Unmute Music" : "Mute Music"}
+            </div>
+          }
           {/* Rest of the code... */}
           <Link to={'/cart'} className="inline-flex items-center text-white bg-indigo-500 border-0 py-2 px-4 focus:outline-none hover:bg-indigo-700 rounded text-base mt-4 md:mt-0">Go to Cart
             <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-4 h-4 ml-1" viewBox="0 0 24 24">

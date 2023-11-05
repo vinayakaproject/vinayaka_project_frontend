@@ -5,16 +5,26 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react'
+import { PostHogProvider } from 'posthog-js/react'
 
 import ReactGA from "react-ga4";
 ReactGA.initialize("G-BRRM44PS00");
+
+const options = {
+  api_host: process.env.REACT_APP_PUBLIC_POSTHOG_HOST,
+}
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
       <ChakraProvider>
-        <App />
+        <PostHogProvider 
+          apiKey={process.env.REACT_APP_PUBLIC_POSTHOG_KEY}
+          options={options}
+        >
+          <App />
+        </PostHogProvider>
       </ChakraProvider>
     </BrowserRouter>
   </React.StrictMode>

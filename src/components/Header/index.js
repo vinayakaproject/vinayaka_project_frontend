@@ -60,28 +60,31 @@ const Header = () => {
   };
 
   useEffect(() => {
-    const audioPlayer = new Audio(audioFile);
+    if(!flagEnabled) {
+      const audioPlayer = new Audio(audioFile);
+  
+      audioPlayer.loop = true;
+      audioPlayer.volume = musicMuted ? 0 : 1;
+  
+      if (musicPlaying && !musicMuted) {
+        audioPlayer.play().catch(error => {
+          console.error('Failed to start audio playback:', error);
+        });
+      } else {
+        audioPlayer.pause();
+      }
+  
+      return () => {
+        audioPlayer.pause();
+        audioPlayer.currentTime = 0;
+      };
 
-    audioPlayer.loop = true;
-    audioPlayer.volume = musicMuted ? 0 : 1;
-
-    if (musicPlaying && !musicMuted) {
-      audioPlayer.play().catch(error => {
-        console.error('Failed to start audio playback:', error);
-      });
-    } else {
-      audioPlayer.pause();
     }
-
-    return () => {
-      audioPlayer.pause();
-      audioPlayer.currentTime = 0;
-    };
   }, [musicPlaying, musicMuted]);
 
   useEffect(() => {
     // Start playing the audio automatically when the component mounts
-    flagEnabled && setMusicPlaying(true);
+    !flagEnabled && setMusicPlaying(true);
   }, []);
 
   return (
@@ -109,7 +112,7 @@ const Header = () => {
         <Flex direction={'row'} gap={4}>
           {/* Rest of the code... */}
           {
-            flagEnabled && 
+            !flagEnabled && 
             <div
               onClick={toggleMute}
               className={`inline-flex items-center text-white border-0 py-2 px-4 focus:outline-none hover:bg-indigo-700 rounded text-base mt-4 md:mt-0 cursor-pointer ${musicMuted ? "bg-red-500 hover:bg-red-700" : "bg-blue-500 hover:bg-blue-700"}`}

@@ -2,6 +2,7 @@ import React from 'react';
 import heroImg from '../../assets/heroImg.jpg';
 import bgVideo from '../../assets/videos/bg1.mp4';
 import { Flex } from '@chakra-ui/react';
+import GaneshaImg from '../../assets/ganesha2.jpg';
 
 const Hero = () => {
   return (
@@ -9,16 +10,16 @@ const Hero = () => {
       <div className="flex-1 h-auto bg-black justify-center items-center">
         {/* Background video */}
         <Flex justifyContent={'center'} alignItems={'center'}>
-          <video
+          {/* <video
             className="top-0 left-0 w-full h-full lg:w-1/2 lg:h-1/2 md:w-1/2 md:h-1/2 object-contain z-0 justify-center items-center "
             autoPlay
             muted
             loop
           >
             <source src={bgVideo} type="video/mp4" />
-            {/* You can add additional source tags for different video formats (e.g., webm, ogv) */}
             Your browser does not support the video tag.
-          </video>
+          </video> */}
+          <img src={GaneshaImg} width={'30%'} alt="Ganesha image" />
         </Flex>
 
         {/* Content */}

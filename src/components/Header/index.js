@@ -59,28 +59,28 @@ const Header = () => {
     setMusicMuted(!musicMuted);
   };
 
-  useEffect(() => {
-    if(!flagEnabled) {
-      const audioPlayer = new Audio(audioFile);
+  // useEffect(() => {
+  //   if(!flagEnabled) {
+  //     const audioPlayer = new Audio(audioFile);
   
-      audioPlayer.loop = true;
-      audioPlayer.volume = musicMuted ? 0 : 1;
+  //     audioPlayer.loop = true;
+  //     audioPlayer.volume = musicMuted ? 0 : 1;
   
-      if (musicPlaying && !musicMuted) {
-        audioPlayer.play().catch(error => {
-          console.error('Failed to start audio playback:', error);
-        });
-      } else {
-        audioPlayer.pause();
-      }
+  //     if (musicPlaying && !musicMuted) {
+  //       audioPlayer.play().catch(error => {
+  //         console.error('Failed to start audio playback:', error);
+  //       });
+  //     } else {
+  //       audioPlayer.pause();
+  //     }
   
-      return () => {
-        audioPlayer.pause();
-        audioPlayer.currentTime = 0;
-      };
+  //     return () => {
+  //       audioPlayer.pause();
+  //       audioPlayer.currentTime = 0;
+  //     };
 
-    }
-  }, [musicPlaying, musicMuted]);
+  //   }
+  // }, [musicPlaying, musicMuted]);
 
   useEffect(() => {
     // Start playing the audio automatically when the component mounts

@@ -25,6 +25,8 @@ import Loading from "../../components/Loading";
 const operators = [
   { label: "Equals", value: "$eq" },
   { label: "Not equal", value: "$ne" },
+  { label: "Greater Than", value: "$gt" },
+  { label: "Less Than", value: "$lt" },
 ];
 
 const productParams = [
@@ -149,7 +151,9 @@ const Products = () => {
       let queryLoc = {};
       filters.forEach((filter) => {
         const fieldOperator = filter.operator.toString();
-        const filterQuery = { [filter.field]: { [fieldOperator]: filter.value } };
+        const filterQuery = {
+          [filter.field]: { [fieldOperator]: filter.value },
+        };
         Object.assign(queryLoc, filterQuery);
       });
       console.log(queryLoc);
@@ -165,8 +169,7 @@ const Products = () => {
     setfilterModel(false);
   };
 
-  if (loading === true)
-    return <Loading mt={10} pt={20} color={"#fff"} />;
+  if (loading === true) return <Loading mt={10} pt={20} color={"#fff"} />;
   return (
     <>
       <Box p="4" mt={20}>
@@ -274,10 +277,12 @@ const Products = () => {
         </div>
         <Flex justifyContent="space-between" alignItems="center">
           <div></div>
-          <Button onClick={() => setfilterModel(true)}
-              _hover={{ bg: 'blue.500', color: 'white' }}
+          <Button
+            onClick={() => setfilterModel(true)}
+            _hover={{ bg: "blue.500", color: "white" }}
           >
-            {filters.length > 0 ? `${filters.length} active ` : ``} <CiFilter />Filter
+            {filters.length > 0 ? `${filters.length} active ` : ``} <CiFilter />
+            Filter
             {filters.length > 1 ? "s" : ""}
           </Button>
         </Flex>

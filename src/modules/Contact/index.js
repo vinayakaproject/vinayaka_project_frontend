@@ -11,7 +11,7 @@ import { FaPhone } from 'react-icons/fa';
 
 const Contact = () => {
   const openDialer = () => {
-    window.location.href = 'tel:9448209993';
+    window.location.href = 'tel:+91 9902030993';
   };
 
   return (
@@ -37,7 +37,7 @@ const Contact = () => {
           onClick={openDialer}
           display="block"
         >
-          Phone: 94482 09993
+          Phone: +91 9902030993
         </Link>
       </VStack>
       <Box

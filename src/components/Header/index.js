@@ -1,23 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import {
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuItemOption,
-  MenuGroup,
-  MenuOptionGroup,
-  Button,
-  Flex,
-  Avatar,
-} from '@chakra-ui/react';
+import { Menu, MenuButton, MenuList, MenuItem, Avatar } from '@chakra-ui/react';
 import supabaseClient from '../../utils/supabaseClient';
 import avatar from '../../avatar.jpg';
 import { useGlobalContext } from '../../utils/context';
 import logo from '../../assets/Logo.png';
-import audioFile from '../../assets/audios/bgmusic.mpeg';
-import { useFeatureFlagEnabled } from 'posthog-js/react';
 
 const navigations = [
   {
@@ -41,11 +28,6 @@ const navigations = [
 const Header = () => {
   const { user, setUser } = useGlobalContext();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
-  const [musicPlaying, setMusicPlaying] = useState(true);
-  const [musicMuted, setMusicMuted] = useState(false);
-
-  const flagEnabled = useFeatureFlagEnabled('auto-music');
 
   const signOut = async () => {
     localStorage.removeItem('cart');
@@ -54,15 +36,6 @@ const Header = () => {
     setUser(null);
     navigate('/');
   };
-
-  const toggleMute = () => {
-    setMusicMuted(!musicMuted);
-  };
-
-  useEffect(() => {
-    // Start playing the audio automatically when the component mounts
-    !flagEnabled && setMusicPlaying(true);
-  }, []);
 
   return (
     <header className="bg-black text-white body-font shadow-lg">
@@ -83,7 +56,7 @@ const Header = () => {
             <Link
               key={navigation.name}
               to={navigation.path}
-              className="mr-5 hover:text-white relative group"
+              className="font-bold mr-5 hover:text-white relative group text-lg"
             >
               {navigation.name}
               <span className="absolute bottom-0 left-0 w-full h-0.5 bg-white transition-transform transform scale-x-0 group-hover:scale-x-100"></span>
@@ -92,27 +65,14 @@ const Header = () => {
           {!user && (
             <Link
               to={'/login'}
-              className="mr-5 hover:text-white relative group"
+              className="font-bold mr-5 hover:text-white relative group text-lg"
             >
               Login
               <span className="absolute bottom-0 left-0 w-full h-0.5 bg-white transition-transform transform scale-x-0 group-hover:scale-x-100"></span>
             </Link>
           )}
         </nav>
-        <Flex direction={'row'} gap={4}>
-          {!flagEnabled && (
-            <div
-              onClick={toggleMute}
-              className={`inline-flex items-center text-white border-0 py-2 px-4 focus:outline-none hover:bg-indigo-700 rounded text-base mt-4 md:mt-0 cursor-pointer ${
-                musicMuted
-                  ? 'bg-red-500 hover:bg-red-700'
-                  : 'bg-blue-500 hover:bg-blue-700'
-              }`}
-              size="md"
-            >
-              {musicMuted ? 'Unmute Music' : 'Mute Music'}
-            </div>
-          )}
+        <div>
           <Link
             to={'/cart'}
             className="inline-flex items-center text-white bg-indigo-500 border-0 py-2 px-4 focus:outline-none hover:bg-indigo-700 rounded text-base mt-4 md:mt-0"
@@ -139,16 +99,14 @@ const Header = () => {
                 src={avatar}
               ></MenuButton>
               <MenuList>
-                <MenuGroup title={'User - ' + user.email}>
-                  <MenuItem onClick={() => navigate('/orders')}>
-                    Orders
-                  </MenuItem>
-                  <MenuItem onClick={signOut}>Logout</MenuItem>
-                </MenuGroup>
+                <MenuItem onClick={() => navigate('/orders')}>
+                  Orders
+                </MenuItem>
+                <MenuItem onClick={signOut}>Logout</MenuItem>
               </MenuList>
             </Menu>
           )}
-        </Flex>
+        </div>
       </div>
     </header>
   );

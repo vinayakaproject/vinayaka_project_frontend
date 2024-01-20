@@ -9,7 +9,7 @@ import ganeshaImage from '../../assets/ganesha.jpg';
 
 const About = () => {
   const containerStyle = {
-    backgroundColor: '#333', // Dark background color
+    backgroundColor: '#333',
     padding: '80px 50px',
     fontFamily: 'Arial, sans-serif',
     backgroundImage: `url(${ganeshaImage})`,
@@ -25,18 +25,19 @@ const About = () => {
   const galleryContainerStyle = {
     display: 'flex',
     marginTop: '20px',
-    marginBottom: '20px', // Add some bottom margin
-    padding: '10px', // Add padding for spacing
-    gap: '20px', // Add gap between images
-    width: '100%', // Full width
+    marginBottom: '20px',
+    padding: '10px',
+    gap: '20px',
+    width: '100%',
   };
 
   const galleryImageStyle = {
-    width: '250px', // Adjust image width
+    width: '250px',
     height: 'auto',
     borderRadius: '10%',
     backgroundColor: '#0095d6',
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.2)',
+    margin: 'auto', // Center-align the image
   };
 
   const sectionStyle = {
@@ -45,8 +46,9 @@ const About = () => {
     padding: '5px',
     borderRadius: '10px',
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.2)',
-    backgroundColor: 'rgba(1, 0, 10, 0.1)', // Semi-transparent black background
-    color: 'white', // Text color
+    backgroundColor: 'rgba(1, 0, 10, 0.1)',
+    color: 'white',
+    fontFamily: 'Arial, sans-serif', // Font style added
   };
 
   const sectionStyle2 = {
@@ -55,40 +57,48 @@ const About = () => {
     padding: '15px',
     borderRadius: '12px',
     boxShadow: '0 4px 10px rgba(0, 0, 0, 0.3)',
-    backgroundColor: 'rgba(1, 0, 10, 0.4)', // Semi-transparent black background
-    color: 'white', // Text color
+    backgroundColor: 'rgba(1, 0, 10, 0.4)',
+    color: 'white',
+    textAlign: 'center', // Center-align text
   };
 
   const headingStyle = {
     fontSize: '1.6rem',
-    fontWeight: 'bold',
-    color:'#0095d6',
+    fontWeight: 'bold', // Added fontWeight for bold text
+    color: '#0095d6',
     marginBottom: '10px',
+    fontFamily: 'Arial, sans-serif',
   };
-
+  
   const headingStyle1 = {
     fontSize: '1.1rem',
-    fontWeight: 'bold',
+    fontWeight: 'bold', // Added fontWeight for bold text
     marginBottom: '10px',
+    fontFamily: 'Arial, sans-serif',
   };
+  
 
   const textStyle = {
     fontSize: '1rem',
     lineHeight: '1.6',
+    fontFamily: 'Roboto, sans-serif',
+    fontWeight: 'bold', // Added fontWeight for bold text
   };
-
+  
   const textStyle1 = {
     fontSize: '0.9rem',
     lineHeight: '1.6',
-    fontStyle: 'italic', // Make the text italic
-    fontWeight: 'bold',  // Make the text bold
+    fontStyle: 'italic',
+    fontWeight: 'bold', // Added fontWeight for bold text
+    fontFamily: 'Roboto, sans-serif',
   };
+  
 
   const imageStyle = {
     width: '200px',
     height: 'auto',
     borderRadius: '10%',
-    margin: '20px 0 `',
+    margin: '20px 0',
   };
   
   return (
@@ -106,10 +116,10 @@ const About = () => {
       <section style={sectionStyle}>
         <h2 style={headingStyle}>Awards</h2>
         <p style={textStyle}>
-          Vinayaka Perfumery is one of the leading manufacturers and exporters of Incense Sticks across the world. Vinayaka Perfumery enjoys a good reputation because of its excellent quality and wide variety. We have been providing high quality Incense products to our customers. Vinayaka incense is the first choice of consumers. We have achieved a distinction of being one the safest incense producers.
+          Vinayaka Perfumery is one of the leading manufacturers and exporters of Incense Sticks across the world. Vinayaka Perfumery enjoys a good reputation because of its excellent quality and wide variety. We have been providing high-quality Incense products to our customers. Vinayaka incense is the first choice of consumers. We have achieved a distinction of being one the safest incense producers.
         </p>
         <p style={textStyle}>
-          Vinayaka has been awarded top exporters awards by ‘Export Promotion Council for Handicraft’ for export of Incense stick for the past three consecutive years 2008-09, 2009-10 and 2010-11.
+          Vinayaka has been awarded top exporters awards by ‘Export Promotion Council for Handicraft’ for export of Incense stick for the past three consecutive years 2008-09, 2009-10, and 2010-11.
         </p>
         <br></br>
         <img src={awardImage} alt="Award" style={imageStyle} />
@@ -135,7 +145,7 @@ const About = () => {
       <section style={sectionStyle}>
         <h2 style={headingStyle}>Fragrances</h2>
         <p style={textStyle}>
-        In the fragrance development lab, experimentation is always on. Best and world class facilities are available to create and nurture the perfumed incense for our consumers. Today Vinayaka has more than 140 fragrances in its range. And this is a major source of its competitive advantage.
+        In the fragrance development lab, experimentation is always on. Best and world-class facilities are available to create and nurture the perfumed incense for our consumers. Today Vinayaka has more than 140 fragrances in its range. And this is a major source of its competitive advantage.
         </p>
         
       </section>
@@ -143,7 +153,7 @@ const About = () => {
       <section style={sectionStyle}>
         <h2 style={headingStyle}>Packaging</h2>
         <p style={textStyle}>
-        We have in-house design studio, who work rigorously to create new graphics for our packs. Vinayaka is able to offer a wide variety of packaging with best suited graphics for the incense it carries.
+        We have an in-house design studio, who work rigorously to create new graphics for our packs. Vinayaka is able to offer a wide variety of packaging with best-suited graphics for the incense it carries.
         </p>
         
       </section>
@@ -167,7 +177,7 @@ const About = () => {
       <section style={sectionStyle}>
         <h2 style={headingStyle}>Our Facilities</h2>
         <p style={textStyle}>
-        We have two factories fully equipped with laboratories catering to global demands of incenses, state of art manufacturing units promising the best quality of incense sticks at optimum cost and withleast wastage. We ensure product specific and country specific packaging facility, best Quality Control and Quality Assurance units to provide flawless and supreme quality  products. 
+        We have two factories fully equipped with laboratories catering to global demands of incenses, state-of-the-art manufacturing units promising the best quality of incense sticks at optimum cost and with least wastage. We ensure product-specific and country-specific packaging facility, best Quality Control and Quality Assurance units to provide flawless and supreme-quality products. 
         </p>
         
       </section>

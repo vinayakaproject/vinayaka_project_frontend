@@ -1,35 +1,63 @@
 import React from 'react';
-import heroImg from '../../assets/heroImg.jpg';
-import bgVideo from '../../assets/videos/bg1.mp4';
-import { Flex } from '@chakra-ui/react';
-import GaneshaImg from '../../assets/ganesha2.jpg';
+import { Navigation, Pagination, Scrollbar, A11y, Autoplay } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
 
-const Hero = () => {
+import bappa2Img from '../../assets/bappa2.png';
+import girl2Img from '../../assets/girl22.png';
+import bothImg from '../../assets/both1.png';
+
+const SwiperShow = () => {
   return (
-    <section className="text-white bg-black body-font">
-      <div className="flex-1 h-auto bg-black justify-center items-center">
-        {/* Background video */}
-        <Flex justifyContent={'center'} alignItems={'center'}>
-          {/* <video
-            className="top-0 left-0 w-full h-full lg:w-1/2 lg:h-1/2 md:w-1/2 md:h-1/2 object-contain z-0 justify-center items-center "
-            autoPlay
-            muted
-            loop
-          >
-            <source src={bgVideo} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video> */}
-          <img src={GaneshaImg} width={'30%'} alt="Ganesha image" />
-        </Flex>
+    <Swiper
+      modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
+      spaceBetween={0}
+      slidesPerView={1}
+      centeredSlides
+      navigation
+      pagination={{ clickable: true }}
+      scrollbar={{ draggable: true }}
+      onSlideChange={() => console.log('slide change')}
+      touchEventsTarget="container"
+      loop={true}
+      autoplay={{
+        delay: 5000,
+        disableOnInteraction: false,
+      }}
+      style={{
+        width: '100%',
+        height: '100%',
+        background: 'black',
+      
+      }}
+    >
+      <SwiperSlide>
+        <div className="image-wrapper" style={{
+          position: 'relative',
+          width: '100%',
+          height: '100%',
+          margin: '0 auto',
+        }}>
+          <h2 className="welcome-text" style={{ fontFamily: 'Lato', color: 'white', marginTop: '75px', textAlign: 'center', fontSize: '26px' }}>Blessings in every breath</h2>
 
-        {/* Content */}
-        <div className="relative z-10 justify-center items-center text-center pb-10">
-          <h1 className="text-4xl text-white font-lumano">Welcome to</h1>
-          <p className="text-6xl mt-5 text-white font-monoton">VINAYAKA WEBSITE</p>
+          <img src={bappa2Img} alt="Slide 1" style={{ width: '50%', height: '60%', objectFit: 'cover', display: 'block', margin: '0 auto' }} />
         </div>
-      </div>
-    </section>
-  );
-}
+      </SwiperSlide>
 
-export default Hero;
+      <SwiperSlide>
+        <img src={bothImg} alt="Slide 2" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+      </SwiperSlide>
+            
+      <SwiperSlide>
+        <div>
+          <img src={girl2Img} alt="Slide 3" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        </div>
+      </SwiperSlide>
+    </Swiper>
+  );
+};
+
+export default SwiperShow;

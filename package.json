@@ -22,6 +22,7 @@
     "react-router-dom": "^6.10.0",
     "react-scripts": "5.0.1",
     "react-spring": "^9.7.2",
+    "swiper": "^11.0.5",
     "web-vitals": "^2.1.4",
     "yup": "^1.2.0"
   },
@@ -56,6 +57,7 @@
     ]
   },
   "devDependencies": {
+    "swiper-bundle": "^0.0.1-security",
     "tailwindcss": "^3.3.1"
   }
 }

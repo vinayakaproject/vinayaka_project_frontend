@@ -64,7 +64,13 @@ const Product = () => {
         } else {
           localStorage.setItem('cart', JSON.stringify([...cart, {...product, quantity: 1}]))
         }
-        alert('Product added to cart')
+        toast({
+          title: "Success",
+          description: "Product added to cart",
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        })
         gaEventTracker("added-to-cart")
         if(redirect) {
           navigate('/cart')

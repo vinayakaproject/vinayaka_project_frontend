@@ -72,7 +72,7 @@ const Header = () => {
             </Link>
           )}
         </nav>
-        <div>
+        <div className='flex gap-2'>
           <Link
             to={'/cart'}
             className="inline-flex items-center text-white bg-indigo-500 border-0 py-2 px-4 focus:outline-none hover:bg-indigo-700 rounded text-base mt-4 md:mt-0"
@@ -100,9 +100,11 @@ const Header = () => {
               ></MenuButton>
               <MenuList>
                 <MenuItem onClick={() => navigate('/orders')}>
-                  Orders
+                  <p className='text-black'>Orders</p>
                 </MenuItem>
-                <MenuItem onClick={signOut}>Logout</MenuItem>
+                <MenuItem onClick={signOut}>
+                  <p className='text-black'>Logout</p>
+                </MenuItem>
               </MenuList>
             </Menu>
           )}

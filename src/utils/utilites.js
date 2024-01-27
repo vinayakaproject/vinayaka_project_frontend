@@ -6,7 +6,7 @@ export const getUser = async () => {
 }
 
 export const userFun = async (urlPath, body, method = "POST") => { 
-    const BACKEND_URL = 'https://vinayaka-project-backend.onrender.com/api/users/';
+    const BACKEND_URL = `${process.env.REACT_APP_BACKEND_URL}/api/users/`;
     const url = BACKEND_URL + urlPath;
 
     const headers = {

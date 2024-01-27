@@ -59,6 +59,7 @@ const Products = () => {
   const [showMoreLoading, setshowMoreLoading] = useState(false);
 
   const fetchProducts = useCallback(async () => {
+    setLoading(true);
     console.log("In fetch");
     console.log(products.length);
     const productsFetch = await userFun(
@@ -110,6 +111,7 @@ const Products = () => {
     prodFetchedRef.current = true;
     console.log(allProducts);
     allProducts.length === 0 && fetchProducts();
+    setLoading(false);
     window.onbeforeunload = function () {
       console.log("In onbeforeunload");
       localStorage.removeItem("allProducts");
@@ -275,14 +277,14 @@ const Products = () => {
             ALL PRODUCTS
           </h1>
         </div>
-        <Flex justifyContent="space-between" alignItems="center">
+        <Flex justifyContent="flex-end" mr={7}>
           <div></div>
           <Button
             onClick={() => setfilterModel(true)}
             _hover={{ bg: "blue.500", color: "white" }}
           >
             {filters.length > 0 ? `${filters.length} active ` : ``} <CiFilter />
-            Filter
+            &nbsp;&nbsp;Filter
             {filters.length > 1 ? "s" : ""}
           </Button>
         </Flex>

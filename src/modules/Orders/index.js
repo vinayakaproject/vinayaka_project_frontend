@@ -271,6 +271,9 @@ const Orders = () => {
             <div className="flex flex-col px-6 py-8 mt-10 mb-10 lg:py-0">
                 <div className="w-full md:mt-0 xl:p-0">
                     <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+                        <div>
+                            <p><span className='font-semibold'>Note:-</span>&nbsp;Orders may take time to reflect. Please try refreshing the page multiple times to view the latest orders</p>
+                        </div>
                         <Flex justifyContent={'space-between'} alignItems={'center'}>
                             <h1 className="text-xl text-center font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                                 Orders

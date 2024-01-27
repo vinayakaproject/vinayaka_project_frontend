@@ -9,6 +9,7 @@ import states from "../../states";
 import { useGlobalContext } from "../../utils/context";
 import { userFun } from "../../utils/utilites";
 import useAnalyticsEventTracker from "../../useAnalyticsEventTracker";
+import { v4 as uuidv4 } from 'uuid';
 
 const SignupSchema = Yup.object().shape({
   flat: Yup.string().required("Flat/House no is required"),
@@ -28,6 +29,8 @@ const Checkout = () => {
   const toast = useToast();
 
   const { user } = useGlobalContext();
+
+  const frontEndUrl = process.env.REACT_APP_FRONTEND_URL || "http://localhost:3000";
 
   const carts = JSON.parse(localStorage.getItem("cart")) || [];
   const gaEventTracker = useAnalyticsEventTracker();
@@ -52,20 +55,11 @@ const Checkout = () => {
     }
   }, [user, navigate]);
 
-  const submitOrder = async (values, { setSubmitting }) => {
-    console.log(values);
+  const placeOrder = async (productId, address, phone, paymode, quantity, id) => {
+    
     setbtnLoading(true);
 
-    const { flat, area, landmark, town, state, pincode, phone, paymode } =
-      values;
-    const { id } = user;
-    const address = `${flat}, ${area}, ${landmark}, ${town}, ${state}, ${pincode}`;
-    const productId = carts.map((cart) => {
-      return cart._id;
-    });
-    const quantity = carts.map((cart) => {
-      return cart.quantity;
-    });
+    console.log(productId, address, phone, paymode, quantity, id);
 
     const order = await userFun("postOrder", {
       productId,
@@ -86,8 +80,7 @@ const Checkout = () => {
         isClosable: true,
       });
       gaEventTracker("ordered");
-      navigate("/orders");
-      window.location.reload();
+      window.location.href = `${frontEndUrl}/orders`;
     } else {
       toast({
         title: "Error",
@@ -97,86 +90,147 @@ const Checkout = () => {
         isClosable: true,
       });
     }
+    
     setbtnLoading(false);
-  };
+  }
 
-  const amount = 500;
-  const currency = "INR";
-  const receiptId = "qwsaq1";
+  const submitOrder = async (values, { setSubmitting }) => {
+    console.log(values);
+    setbtnLoading(true);
 
-  const paymentHandler = async (values, setSubmitting, e) => {
-    const response = await fetch("http://localhost:5500/order", {
-      method: "POST",
-      body: JSON.stringify({
-        amount,
-        currency,
-        receipt: receiptId,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
+    const { flat, area, landmark, town, state, pincode, phone, paymode } =
+      values;
+    const { id, email, user_metadata } = user;
+    const address = `${flat}, ${area}, ${landmark}, ${town}, ${state}, ${pincode}`;
+    const productId = carts.map((cart) => {
+      return cart._id;
     });
-    const order = await response.json();
-    console.log(order);
+    console.log(productId);
+    const quantity = carts.map((cart) => {
+      return cart.quantity;
+    });
 
-    var options = {
-      key: "rzp_test_7oPGpjnn47bVBx",
-      amount,
-      currency,
-      name: "VINAYAKA",
-      description: "Test Transaction",
-      image: "logo.svg",
-      order_id: order.id,
-      handler: async function (response) {
-        const body = {
-          ...response,
-        };
+    if(paymode === "Online") {
+      const currency = "INR";
+      const receiptId = uuidv4();
 
-        const validateRes = await fetch(
-          "http://localhost:5500/order/validate",
-          {
-            method: "POST",
-            body: JSON.stringify(body),
-            headers: {
-              "Content-Type": "application/json",
-            },
+      const response = await userFun("postOrder", {
+        productId: JSON.stringify(productId),
+        quantity: JSON.stringify(quantity),
+        phone,
+        paymentMode: paymode,
+        userId: id,
+        razorpay: {
+          currency,
+          receipt: receiptId,
+          notes: {
+            userEmail: email,
+            userName: user_metadata.name,
+            productId: JSON.stringify(productId),
+            quantity: JSON.stringify(quantity),
+            address,
+            paymentMode: paymode,
+            phone,
+            userId: id,
           }
-        );
-        const jsonRes = await validateRes.json();
-        console.log(jsonRes);
-
-        if (jsonRes.success) {
-          console.log("Payment successful");
-          // Redirect to orders page
-          navigate("/orders");
-          setSubmitting(false);
         }
-      },
-      prefill: {
-        name: values.userName, // Use the actual field from your form data
-        email: values.email, // Use the actual field from your form data
-        contact: values.phone, // Use the actual field from your form data
-      },
-      notes: {
-        address: values.address, // Use the actual field from your form data
-      },
-      theme: {
-        color: "#3399cc",
-      },
-    };
+      });
 
-    var rzp1 = new window.Razorpay(options);
-    rzp1.on("payment.failed", function (response) {
-      alert(response.error.code);
-      alert(response.error.description);
-      alert(response.error.source);
-      alert(response.error.step);
-      alert(response.error.reason);
-      alert(response.error.metadata.order_id);
-      alert(response.error.metadata.payment_id);
-    });
-    rzp1.open();
-    e.preventDefault();
+      if(response.status === 201) { 
+
+        const order = await response.message;
+        const amount = order.amount;
+        console.log(order);
+    
+        var options = {
+          key: "rzp_test_7oPGpjnn47bVBx",
+          amount,
+          currency,
+          name: "VINAYAKA",
+          description: "Test Transaction",
+          image: "logo.svg",
+          order_id: order.id,
+          handler: async function (response) {
+            console.log(response);
+
+            const body = {
+              ...response,
+            };
+    
+            const validateRes = await fetch(
+              `${process.env.REACT_APP_BACKEND_URL}/order/frontend/validate`,
+              {
+                method: "POST",
+                body: JSON.stringify(body),
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            const jsonRes = await validateRes.json();
+            console.log(jsonRes);
+    
+            if (jsonRes.msg === "success") {
+              console.log("Payment successful");
+              localStorage.removeItem("cart");
+              toast({
+                title: "Success",
+                description: "Your order was successfully placed",
+                status: "success",
+                duration: 9000,
+                isClosable: true,
+              });
+              window.location.href = `${frontEndUrl}/orders`;
+            } else {
+              toast({
+                title: "Error",
+                description: "There was an error making payment. Please try again later.",
+                status: "error",
+                duration: 9000,
+                isClosable: true,
+              });
+            }
+            setbtnLoading(false);
+          },
+          prefill: {
+            name: user_metadata.name,
+            email: email,
+            contact: phone,
+          },
+          notes: {
+            name: user_metadata.name,
+            email: email,
+            contact: phone,
+            address: address,
+          },
+          theme: {
+            color: "#3399cc",
+          },
+        };
+    
+        var rzp1 = new window.Razorpay(options);
+        rzp1.on("payment.failed", function (response) {
+          alert(response.error.description);
+          setbtnLoading(false);
+        });
+        rzp1.open();
+
+      } else {
+        
+        setbtnLoading(false);
+        return toast({
+          title: "Error",
+          description: response.message,
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+
+      }
+ 
+    } else {
+      placeOrder(productId, address, phone, paymode, quantity, id);
+    }
   };
 
   return (
@@ -412,17 +466,8 @@ const Checkout = () => {
                         <Button
                           isLoading={btnLoading}
                           onClick={async (e) => {
-                            if (!values.paymode) {
-                              // If payment mode is not selected, show an error message
-                              alert("Please select a payment mode.");
-                            } else if (values.paymode === "Online") {
                               e.preventDefault();
-                              await paymentHandler(values, setSubmitting, e);
-                            } else {
-                              // Redirect to Orders page for Cash on Delivery
-                              navigate("/orders");
-                              await handleSubmit(values, setSubmitting, e);
-                            }
+                              handleSubmit(values, setSubmitting);
                           }}
                           className="w-full mt-5 text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
                         >

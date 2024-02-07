@@ -99,6 +99,14 @@ const Footer = () => {
               </li>
               <li>
                 <Link
+                  to={"/Shipping-Policy"}
+                  className="text-gray-600 hover:text-blue-800"
+                  >
+                    Shipping Policy
+                  </Link>
+              </li>
+              <li>
+                <Link
                   to={"/Refund-Policy"}
                   className="text-gray-600 hover:text-blue-800"
                 >

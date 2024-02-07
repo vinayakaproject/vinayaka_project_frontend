@@ -3,6 +3,7 @@ import './App.css';
 import Footer from './components/Footer';
 import PrivacyPolicy from './components/Privacy Policy';
 import RefundPolicy from './components/RefundPolicy';
+import ShippingPolicy from './components/Footer/ShippingPolicy';
 import TermsAndConditions from './components/TermsAndConditions';
 import Header from './components/Header';
 import Login from './modules/Login';
@@ -52,7 +53,8 @@ function App() {
           <Route path="/contact" element={<Contact/>} />
           <Route path="/About" element={<About/>} />
           <Route path="/Privacy-Policy" element={<PrivacyPolicy/>}/> 
-          <Route path="/Refund-Policy" element={<RefundPolicy />} /> 
+          <Route path="/Refund-policy" element={<RefundPolicy />} /> 
+          <Route path="/Shipping-policy" element={<ShippingPolicy/>} />
           <Route path='/Terms-And-Conditions' element={<TermsAndConditions/>} />
           <Route path="*" element={<div>404</div>} />
         </Routes>

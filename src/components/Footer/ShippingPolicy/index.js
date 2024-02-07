@@ -9,7 +9,7 @@ const ShippingPolicy = () => {
       </Heading>
       <UnorderedList mb="4">
         <ListItem>
-          We offer shipping to most regions worldwide. Please note that shipping
+          We offer shipping to most regions around India. Please note that shipping
           times may vary depending on your location.
         </ListItem>
         <ListItem>

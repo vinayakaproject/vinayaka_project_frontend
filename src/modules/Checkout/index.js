@@ -10,6 +10,7 @@ import { useGlobalContext } from "../../utils/context";
 import { userFun } from "../../utils/utilites";
 import useAnalyticsEventTracker from "../../useAnalyticsEventTracker";
 import { v4 as uuidv4 } from 'uuid';
+import logo from "../../assets/Logo.png";
 
 const SignupSchema = Yup.object().shape({
   flat: Yup.string().required("Flat/House no is required"),
@@ -143,12 +144,12 @@ const Checkout = () => {
         console.log(order);
     
         var options = {
-          key: "rzp_test_7oPGpjnn47bVBx",
+          key: process.env.REACT_APP_RAZORPAY_KEY,
           amount,
           currency,
           name: "VINAYAKA",
-          description: "Test Transaction",
-          image: "logo.svg",
+          description: "",
+          image: logo,
           order_id: order.id,
           handler: async function (response) {
             console.log(response);
@@ -214,6 +215,7 @@ const Checkout = () => {
           setbtnLoading(false);
         });
         rzp1.open();
+        setbtnLoading(false);
 
       } else {
         

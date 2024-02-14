@@ -59,7 +59,6 @@ const Products = () => {
   const [showMoreLoading, setshowMoreLoading] = useState(false);
 
   const fetchProducts = useCallback(async () => {
-    setLoading(true);
     console.log("In fetch");
     console.log(products.length);
     const productsFetch = await userFun(

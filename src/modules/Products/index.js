@@ -35,6 +35,25 @@ const productParams = [
   { label: "Category", value: "category" },
 ];
 
+const categories = [
+  "ALL",
+  "Buy 1 Get 1 Packs",
+  "Dhoop & Incense Sticks",
+  "Dhoop Cups",
+  "Economy packs",
+  "Jumbo Zipper Packs",
+  "New Launch Jumbo Zipper Pack",
+  "New Launch Regular pouch series",
+  "New Launch Zipper Pack",
+  "Premium Box Packs",
+  "Premium Dhoop Sticks",
+  "Premium Incense Sticks",
+  "Pulse Series",
+  "Regular Box Packs",
+  "Regular pouch series",
+  "Zipper Pack",
+];
+
 const Products = () => {
   let allProducts = localStorage.getItem("allProducts")
     ? JSON.parse(localStorage.getItem("allProducts"))
@@ -50,13 +69,13 @@ const Products = () => {
   const cancelRef = useRef();
   const [loading, setLoading] = useState(true);
   const [filterModel, setfilterModel] = useState(false);
-  const [filters, setfilters] = useState(productsFilters);
+  const [filters, setFilters] = useState(productsFilters);
   const [query, setQuery] = useState(productQuery);
-  const [applyFilterLoad, setapplyFilterLoad] = useState(false);
+  const [applyFilterLoad, setApplyFilterLoad] = useState(false);
 
   const toast = useToast();
   const [products, setProducts] = useState(allProducts);
-  const [showMoreLoading, setshowMoreLoading] = useState(false);
+  const [showMoreLoading, setShowMoreLoading] = useState(false);
 
   const fetchProducts = useCallback(async () => {
     console.log("In fetch");
@@ -118,9 +137,9 @@ const Products = () => {
   }, [allProducts]);
 
   const showMore = async () => {
-    setshowMoreLoading(true);
+    setShowMoreLoading(true);
     fetchProducts().then(() => {
-      setshowMoreLoading(false);
+      setShowMoreLoading(false);
     });
   };
 
@@ -130,15 +149,15 @@ const Products = () => {
       operator: "",
       value: "",
     };
-    setfilters([...filters, newFilter]);
+    setFilters([...filters, newFilter]);
   };
 
   const applyFilter = async () => {
-    setapplyFilterLoad(true);
+    setApplyFilterLoad(true);
     console.log(filters);
     const emptyFilter = filters.filter(
       (filter) =>
-        filter.field === "" || filter.operator === "" || filter.value === ""
+        filter.field === "" || filter.operator === "" || (filter.field !== "category" && filter.value === "")
     );
     if (emptyFilter.length > 0) {
       toast({
@@ -151,11 +170,21 @@ const Products = () => {
     } else {
       let queryLoc = {};
       filters.forEach((filter) => {
-        const fieldOperator = filter.operator.toString();
-        const filterQuery = {
-          [filter.field]: { [fieldOperator]: filter.value },
-        };
-        Object.assign(queryLoc, filterQuery);
+        if (filter.field !== "category") {
+          const fieldOperator = filter.operator.toString();
+          const filterQuery = {
+            [filter.field]: { [fieldOperator]: filter.value },
+          };
+          Object.assign(queryLoc, filterQuery);
+        } else {
+          // If category is selected, don't include it in the query
+          if (filter.value !== "ALL") {
+            const filterQuery = {
+              [filter.field]: filter.value,
+            };
+            Object.assign(queryLoc, filterQuery);
+          }
+        }
       });
       console.log(queryLoc);
       setQuery(queryLoc);
@@ -166,8 +195,19 @@ const Products = () => {
       allProducts = [];
       setProducts(allProducts);
     }
-    setapplyFilterLoad(false);
+    setApplyFilterLoad(false);
     setfilterModel(false);
+  };
+
+  const resetFilters = () => {
+    setFilters([]);
+    setQuery({});
+    localStorage.removeItem("productsQuery");
+    localStorage.removeItem("productsFilters");
+    localStorage.removeItem("allProducts");
+    prodFetchedRef.current = false;
+    allProducts = [];
+    setProducts(allProducts);
   };
 
   if (loading === true) return <Loading mt={10} pt={20} color={"#fff"} />;
@@ -187,55 +227,87 @@ const Products = () => {
                       <FormLabel>Field</FormLabel>
                       <Select
                         variant="filled"
-                        defaultValue={filter.field}
+                        defaultValue={filter.field === "category" ? "category" : filter.field}
                         onChange={(e) => {
                           const newFilters = [...filters];
                           newFilters[index].field = e.target.value;
-                          setfilters(newFilters);
+                          if (e.target.value === "category") {
+                            newFilters[index].value = ""; // Reset product value if category selected
+                          }
+                          setFilters(newFilters);
                         }}
                         placeholder="Select option"
                       >
                         {productParams.map((param) => (
-                          <option value={param.value}>{param.label}</option>
+                          <option key={param.value} value={param.value}>
+                            {param.label}
+                          </option>
                         ))}
                       </Select>
                     </FormControl>
-                    <FormControl>
-                      <FormLabel>Operator</FormLabel>
-                      <Select
-                        variant="filled"
-                        defaultValue={filter.operator}
-                        onChange={(e) => {
-                          const newFilters = [...filters];
-                          newFilters[index].operator = e.target.value;
-                          setfilters(newFilters);
-                        }}
-                        placeholder="Select option"
-                      >
-                        {operators.map((param) => (
-                          <option value={param.value}>{param.label}</option>
-                        ))}
-                      </Select>
-                    </FormControl>
-                    <FormControl>
-                      <FormLabel>Value</FormLabel>
-                      <Input
-                        defaultValue={filter.value}
-                        type="text"
-                        onChange={(e) => {
-                          const newFilters = [...filters];
-                          newFilters[index].value = e.target.value;
-                          setfilters(newFilters);
-                        }}
-                        placeholder="Enter Value here..."
-                      />
-                    </FormControl>
+                    {filter.field === "category" && (
+                      <FormControl>
+                        <FormLabel>Category</FormLabel>
+                        <Select
+                          variant="filled"
+                          value={filter.value}
+                          onChange={(e) => {
+                            const newFilters = [...filters];
+                            newFilters[index].value = e.target.value;
+                            setFilters(newFilters);
+                          }}
+                          placeholder="Select category"
+                        >
+                          {categories.map((category) => (
+                            <option key={category} value={category}>
+                              {category}
+                            </option>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    )}
+                    {filter.field !== "category" && (
+                      <FormControl>
+                        <FormLabel>Operator</FormLabel>
+                        <Select
+                          variant="filled"
+                          defaultValue={filter.operator}
+                          onChange={(e) => {
+                            const newFilters = [...filters];
+                            newFilters[index].operator = e.target.value;
+                            setFilters(newFilters);
+                          }}
+                          placeholder="Select option"
+                        >
+                          {operators.map((param) => (
+                            <option key={param.value} value={param.value}>
+                              {param.label}
+                            </option>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    )}
+                    {filter.field !== "category" && (
+                      <FormControl>
+                        <FormLabel>Value</FormLabel>
+                        <Input
+                          defaultValue={filter.value}
+                          type="text"
+                          onChange={(e) => {
+                            const newFilters = [...filters];
+                            newFilters[index].value = e.target.value;
+                            setFilters(newFilters);
+                          }}
+                          placeholder="Enter Value here..."
+                        />
+                      </FormControl>
+                    )}
                     <Flex
                       mt={43}
                       onClick={() => {
                         const newFilters = [...filters];
                         newFilters.splice(index, 1);
-                        setfilters(newFilters);
+                        setFilters(newFilters);
                       }}
                       cursor={"pointer"}
                     >
@@ -243,10 +315,10 @@ const Products = () => {
                     </Flex>
                   </Flex>
                 ))}
-              <Flex mt={5} gap={3}>
+              <Flex className="justify-center" mt={5} gap={3}>
                 <Button onClick={addFilter}>Add Filter</Button>
                 {filters.length > 0 && (
-                  <Button colorScheme="red" onClick={() => setfilters([])}>
+                  <Button colorScheme="red" onClick={resetFilters}>
                     Reset
                   </Button>
                 )}

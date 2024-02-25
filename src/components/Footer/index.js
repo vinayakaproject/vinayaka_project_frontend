@@ -23,14 +23,14 @@ const Footer = () => {
             </h2>
             <nav className="list-none mb-10">
               <li>
-                <Link to={"/"} className="text-gray-600 hover:text-gray-800">
+                <Link to={"/"} className="text-gray-600 hover:text-blue-800">
                   Home
                 </Link>
               </li>
               <li>
                 <Link
                   to={"/products"}
-                  className="text-gray-600 hover:text-gray-800"
+                  className="text-gray-600 hover:text-blue-800"
                 >
                   Products
                 </Link>
@@ -38,7 +38,7 @@ const Footer = () => {
               <li>
                 <Link
                   to={"/about"}
-                  className="text-gray-600 hover:text-gray-800"
+                  className="text-gray-600 hover:text-blue-800"
                 >
                   About
                 </Link>
@@ -46,7 +46,7 @@ const Footer = () => {
               <li>
                 <Link
                   to={"/contact"}
-                  className="text-gray-600 hover:text-gray-800"
+                  className="text-gray-600 hover:text-blue-800"
                 >
                   Contact
                 </Link>
@@ -61,7 +61,7 @@ const Footer = () => {
               <li>
                 <Link
                   to={"/cart"}
-                  className="text-gray-600 hover:text-gray-800"
+                  className="text-gray-600 hover:text-blue-800"
                 >
                   Cart
                 </Link>
@@ -69,7 +69,7 @@ const Footer = () => {
               <li>
                 <Link
                   to={"/orders"}
-                  className="text-gray-600 hover:text-gray-800"
+                  className="text-gray-600 hover:text-blue-800"
                 >
                   Orders
                 </Link>

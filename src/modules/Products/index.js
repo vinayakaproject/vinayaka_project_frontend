@@ -157,7 +157,7 @@ const Products = () => {
     console.log(filters);
     const emptyFilter = filters.filter(
       (filter) =>
-        filter.field === "" || filter.operator === "" || (filter.field !== "category" && filter.value === "")
+        filter.field === "" || (filter.field !== "category" && (filter.operator === "" || filter.value === ""))
     );
     if (emptyFilter.length > 0) {
       toast({
@@ -169,7 +169,7 @@ const Products = () => {
       });
     } else {
       let queryLoc = {};
-      filters.forEach((filter) => {
+      filters.forEach((filter, index) => { // Add index parameter here
         if (filter.field !== "category") {
           const fieldOperator = filter.operator.toString();
           const filterQuery = {
@@ -183,6 +183,8 @@ const Products = () => {
               [filter.field]: filter.value,
             };
             Object.assign(queryLoc, filterQuery);
+            // Remove operator from the category filter
+            filters[index].operator = ''; // Set operator to empty string for category filter
           }
         }
       });
@@ -198,6 +200,7 @@ const Products = () => {
     setApplyFilterLoad(false);
     setfilterModel(false);
   };
+  
 
   const resetFilters = () => {
     setFilters([]);
